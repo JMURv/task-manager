@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+{% load bootstrap4 %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block content %}
+<h1>Users</h1>
+{% for user in users %}
+  <h3>{{ user.username }}</h3>
+  <a href="{% url 'update_user' user.id %}">Редактировать</a>
+  <a href="{% url 'delete_user' user.id %}">Удалить</a>
+{% endfor %}
+{% endblock %}

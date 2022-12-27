@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% load bootstrap4 %}
+{% load i18n %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block content %}
+<!--  <div class="container mt-4">-->
+<!--  {% if form.subject.errors %}-->
+<!--  <div>-->
+<!--    <ul>-->
+<!--      {% for error in form.subject.errors %}-->
+<!--      <li><strong>{{ error|escape }}</strong></li>-->
+<!--      {% endfor %}-->
+<!--    </ul>-->
+<!--  </div>-->
+<!--  {% endif %}-->
+<form action="{% url 'delete_user' user_id=user_id %}" method="post">
+  <div class="form-group">
+  {% csrf_token %}
+  <h3>Удалить {{ user.username }}?</h3>
+  <input type="submit" value="Удалить">
+  </div>
+</form>
+{% endblock content %}
