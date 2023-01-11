@@ -1,10 +1,12 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.views import View
 
 from django.contrib.auth import get_user_model
 
-from manager.forms import CreateUserForm
+from manager.forms import CreateUserForm, LoginForm
+from django.contrib import messages
 
 
 class IndexView(View):
@@ -79,21 +81,58 @@ class UsersDeleteView(View):
         return redirect('users_list')
 
 
-class LoginView(View):
+class RegistrationView(View):
 
     def get(self, request):
         form = CreateUserForm()
+        return render(request, 'register.html', context={
+            'form': form,
+        })
+
+    def post(self, request):
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            messages.success(request, "Вы зарегестрированы!")
+            username = request.POST['username']
+            password = request.POST['password']
+            user = User.objects.create_user(username=username, password=password)
+            user.save()
+            return redirect('login_page')
+        else:
+            messages.error(request, "Ошибка!")
+            errors = form.errors
+            return render(request, 'register.html', context={
+                'form': form,
+                'errors': errors,
+            })
+
+
+class LoginView(View):
+
+    def get(self, request):
+        form = LoginForm()
         return render(request, 'login.html', context={
             'form': form,
         })
 
-    def post(self, request, *args, **kwargs):
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('users_list')
+    def post(self, request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    messages.success(request, "Вы залогинены!")
+                    login(request, user)
+                    return redirect('index')
+            else:
+                messages.error(request, "Ошибка!")
+                errors = form.errors
+                return render(request, 'login.html', context={
+                    'form': form,
+                    'errors': errors,
+                })
 
 
 class LogoutView(View):

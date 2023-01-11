@@ -7,7 +7,6 @@
 
 {% block content %}
 
-
 {% if form.subject.errors %}
 <div class="container mt-4">
   <h1>NOT VALID</h1>
@@ -21,13 +20,13 @@
 </div>
 {% endif %}
 
-<form action="{% url 'login_page' %}" method="post">
+<form action="{% url 'register_page' %}" method="post">
   <div class="form-group">
   {% csrf_token %}
   <table border="1">
     {{ form }}
   </table>
-  <input type="submit" value="Войти">
+  <input type="submit" value="Зарегестрироваться">
   </div>
 </form>
 
