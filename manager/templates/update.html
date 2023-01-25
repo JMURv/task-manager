@@ -5,24 +5,18 @@
 {% bootstrap_javascript jquery='full' %}
 {% get_current_language as LANGUAGE_CODE %}
 
+{% block title %}
+Редактирование пользователя
+{% endblock %}
+
 {% block content %}
-<!--  <div class="container mt-4">-->
-<!--  {% if form.subject.errors %}-->
-<!--  <div>-->
-<!--    <ul>-->
-<!--      {% for error in form.subject.errors %}-->
-<!--      <li><strong>{{ error|escape }}</strong></li>-->
-<!--      {% endfor %}-->
-<!--    </ul>-->
-<!--  </div>-->
-<!--  {% endif %}-->
-<form action="{% url 'update_user' user_id=user_id %}" method="post">
-  <div class="form-group">
-  {% csrf_token %}
-  <table border="1">
-    {{ form }}
-  </table>
-  <input type="submit" value="Сохранить">
-  </div>
+
+<h1 class="my-4">Изменение пользователя</h1>
+
+<form method="post">{% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons submit='Изменить'%}
+    {% endbuttons %}
 </form>
-{% endblock content %}
+
+{% endblock %}

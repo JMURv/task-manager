@@ -4,10 +4,29 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block content %}
-<h1>Users</h1>
+<h1>Пользователи</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Имя пользователя</th>
+      <th scope="col">Полное имя</th>
+      <th scope="col">Меню</th>
+    </tr>
+  </thead>
+  <tbody>
 {% for user in users %}
-  <h3>{{ user.username }}</h3>
-  <a href="{% url 'update_user' user.id %}">Редактировать</a>
-  <a href="{% url 'delete_user' user.id %}">Удалить</a>
+  <tr>
+    <td scope="row">{{ user.id }}</td>
+    <td scope="row">{{ user.username }}</td>
+    <td scope="row">{{ user.username }}</td>
+    <td scope="row">
+      <a href="{% url 'update_user' user.id %}">Редактировать</a>
+      <br>
+      <a href="{% url 'delete_user' user.id %}">Удалить</a>
+    </td>
+  </tr>
 {% endfor %}
+  </tbody>
+</table>
 {% endblock %}

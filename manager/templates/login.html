@@ -7,28 +7,19 @@
 
 {% block content %}
 
+<div class="container wrapper flex-grow-1">
 
-{% if form.subject.errors %}
-<div class="container mt-4">
-  <h1>NOT VALID</h1>
-  <div>
-    <ul>
-      {% for error in form.subject.errors %}
-      <li><strong>{{ error|escape }}</strong></li>
-      {% endfor %}
-    </ul>
-  </div>
+    <h1 class="my-4">
+        Вход
+    </h1>
+
+    <form method="post" action="{% url 'login_page' %}">
+        {% csrf_token %}
+        {% bootstrap_form form%}
+
+        {% buttons submit='Войти'%}
+        {% endbuttons %}
+    </form>
 </div>
-{% endif %}
 
-<form action="{% url 'login_page' %}" method="post">
-  <div class="form-group">
-  {% csrf_token %}
-  <table border="1">
-    {{ form }}
-  </table>
-  <input type="submit" value="Войти">
-  </div>
-</form>
-
-{% endblock content %}
+{% endblock %}

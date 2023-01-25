@@ -5,24 +5,17 @@
 {% bootstrap_javascript jquery='full' %}
 {% get_current_language as LANGUAGE_CODE %}
 
+{% block title %}
+Создать юзера
+{% endblock %}
+
 {% block content %}
-<!--  <div class="container mt-4">-->
-<!--  {% if form.subject.errors %}-->
-<!--  <div>-->
-<!--    <ul>-->
-<!--      {% for error in form.subject.errors %}-->
-<!--      <li><strong>{{ error|escape }}</strong></li>-->
-<!--      {% endfor %}-->
-<!--    </ul>-->
-<!--  </div>-->
-<!--  {% endif %}-->
-<form action="{% url 'create_user' %}" method="post">
-  <div class="form-group">
-  {% csrf_token %}
-  <table border="1">
-    {{ form }}
-  </table>
-  <input type="submit" value="Создать">
-  </div>
+<h1 class="my-4">Регистрация</h1>
+<form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons submit='Зарегистрировать'%}
+    {% endbuttons %}
 </form>
+
 {% endblock content %}

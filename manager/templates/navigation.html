@@ -1,10 +1,37 @@
- <div class="container">
-    <header class="d-flex justify-content-center py-3">
-      <ul class="nav nav-pills">
-        <li class="nav-item"><a href="{% url 'login_page' %}" class="nav-link active" aria-current="page">Вход</a></li>
-        <li class="nav-item"><a href="{% url 'register_page' %}" class="nav-link">Регистрация</a></li>
-        <li class="nav-item"><a href="{% url 'users_list' %}" class="nav-link">Пользователи</a></li>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+    <a class="navbar-brand" href="{% url 'index' %}">Менеджер задач</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'users_list' %}">Пользователи</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout_page' %}">Статусы</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout_page' %}">Метки</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout_page' %}">Задачи</a>
+        </li>
+        {% endif %}
       </ul>
-    </header>
-  </div>
-    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+
+      <ul class="navbar-nav">
+        {% if not user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'login_page' %}">Вход</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'create_user' %}">Регистрация</a>
+        </li>
+        {% else %}
+          <form action="/logout/" method="post">
+          {% csrf_token %}
+            <input class="btn nav-link" type="submit" value="Выход">
+          </form>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
