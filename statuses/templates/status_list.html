@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Список статусов
+{% endblock %}
+
+{% block content %}
+
+  <h1 class="my-4">Статусы</h1>
+  <a class="nav-link" href="{% url 'create_status' %}"> Создать статус</a>
+  <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Имя</th>
+          <th scope="col">Дата создания</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for status in object_list %}
+              <tr>
+                  <th scope="row">{{ status.id }}</th>
+                  <td>{{ status.name }}</td>
+                  <td>{{ status.created_at }}</td>
+                  <td>
+                    <a href="{% url 'update_status' status.id %}">Изменить</a>
+                    <br>
+                    <a href="{% url 'delete_status' status.id %}">Удалить</a>
+                  </td>
+              </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+
+{% endblock %}

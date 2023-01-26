@@ -1,15 +1,16 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
-# from django.contrib.auth.models import User
 from django.views import View
 
 from django.contrib.auth import get_user_model
 
+from manager.mixins import AuthRequiredMixin
 from manager.models import User
 from manager.forms import UserForm, LoginForm
 from django.contrib import messages
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 class IndexView(View):
@@ -54,7 +55,7 @@ class UsersCreateView(View):
             })
 
 
-class UsersUpdateView(LoginRequiredMixin, View):
+class UsersUpdateView(AuthRequiredMixin, SuccessMessageMixin, View):
     template_name = 'update.html'
     login_url = '/login/'
 

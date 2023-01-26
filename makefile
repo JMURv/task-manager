@@ -2,7 +2,6 @@ start:
 	python manage.py runserver
 
 migrate:
+	python manage.py makemigrations
 	python manage.py migrate
 
-makemigration:
-	python manage.py makemigrations
