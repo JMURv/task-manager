@@ -5,7 +5,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from labels.models import Label
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
-from manager.mixins import AuthRequiredMixin
+from task_manager.mixins import AuthRequiredMixin
 
 
 class LabelListView(AuthRequiredMixin, ListView):

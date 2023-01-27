@@ -2,7 +2,7 @@ from django.shortcuts import redirect
 
 from django.urls import reverse_lazy
 
-from manager.mixins import AuthRequiredMixin
+from task_manager.mixins import AuthRequiredMixin
 
 from .forms import StatusForm
 from .models import Status

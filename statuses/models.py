@@ -12,6 +12,7 @@ class Status(models.Model):
         auto_now_add=True,
         verbose_name='Created'
     )
+    objects = models.Manager()
 
     def __str__(self):
         return self.name

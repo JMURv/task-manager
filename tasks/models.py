@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 
 
 class Task(models.Model):
+    objects = models.Manager()
     name = models.CharField(
         'Имя',
         max_length=200,

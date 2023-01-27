@@ -15,6 +15,8 @@ import os
 from dotenv import find_dotenv, load_dotenv
 load_dotenv(find_dotenv())
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-daf7&5(r2n4dn&+)%l$s1n+7--tg29=8vf7k5h#lhfef12w_79'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,12 +42,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'manager',
+    'task_manager',
+    'users',
     'bootstrap4',
     'statuses',
     'tasks',
     'labels',
     'django_filters',
+    'django_truncate',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -135,7 +140,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = "manager.User"
+AUTH_USER_MODEL = "users.User"
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 ROLLBAR = {
     'access_token': os.getenv('ROLLBAR_TOKEN'),
