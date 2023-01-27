@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+{% load bootstrap4 %}
+{% load i18n %}
+
+{% block title %}
+Список задач
+{% endblock %}
+
+{% block content %}
+  <h1 class="my-4">Задачи</h1>
+  <a class="nav-link" href="{% url 'task_create' %}"> Создать задачу</a>
+  <div class="card mb-3">
+    <div class="card-body bg-light">
+      <form class="form-inline center" method="get">
+        {% bootstrap_field filter.form.status field_class='ml-2 mr-3' %}
+        {% bootstrap_field filter.form.executor field_class='mr-3 ml-2' %}
+        {% bootstrap_field filter.form.label field_class='mr-3 ml-2' %}
+        {% bootstrap_field filter.form.self_tasks field_class='mr-3' %}
+        {% buttons %}
+        <input class="btn btn-primary" type="submit" value="Показать">
+        {% endbuttons %}
+      </form>
+    </div>
+  </div>
+  <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Имя</th>
+          <th scope="col">Статус</th>
+          <th scope="col">Автор</th>
+          <th scope="col">Исполнитель</th>
+          <th scope="col">Дата создания</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for task in filter.qs %}
+              <tr>
+                  <th scope="row">{{ task.id }}</th>
+                  <td> <a href='{% url "task_detail" task.id %}'>{{ task.name }}</a></td>
+                  <td>{{ task.status }}</td>
+                  <td>{{ task.creator }}</td>
+                  <td>{{ task.executor }}</td>
+                  <td>{{ task.created_at }}</td>
+                  <td>
+                    <a href="{% url 'task_update' task.id %}">Изменить</a>
+                    <br>
+                    <a href="{% url 'task_delete' task.id %}">Удалить</a>
+                  </td>
+              </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+{% endblock %}

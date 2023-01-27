@@ -13,3 +13,16 @@ class AuthRequiredMixin(LoginRequiredMixin):
     def handle_no_permission(self):
         messages.error(self.request, self.permission_denied_message)
         return redirect(self.permission_denied_url)
+
+
+class TaskDeletePermissionMixin:
+    def get(self, request, *args, **kwargs):
+        self.permission_denied_message = 'Задачу может удалить только её автор'
+        self.permission_denied_url = reverse_lazy('list_task')
+        self.object = self.get_object()
+
+        if self.object.creator == self.request.user:
+            return super().get(request, *args, **kwargs)
+        else:
+            messages.error(self.request, self.permission_denied_message)
+            return redirect(self.permission_denied_url)

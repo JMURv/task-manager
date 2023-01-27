@@ -42,7 +42,9 @@ class UsersCreateView(View):
             messages.success(request, "Вы зарегестрированы!")
             username = request.POST.get('username')
             password = request.POST.get('password1')
-            user = User.objects.create_user(username=username, password=password)
+            user = User.objects.create_user(
+                username=username,
+                password=password)
             user.set_password(password)
             user.save()
             return redirect('login_page')
@@ -65,7 +67,10 @@ class UsersUpdateView(AuthRequiredMixin, SuccessMessageMixin, View):
         user_model = get_user_model()
         user = user_model.objects.get(id=user_id)
         form = UserForm(instance=user)
-        return render(request, 'update.html', {'form': form, 'user_id': user_id})
+        return render(request, 'update.html', context={
+            'form': form,
+            'user_id': user_id
+        })
 
     def post(self, request, *args, **kwargs):
         """Обновление"""
@@ -76,7 +81,10 @@ class UsersUpdateView(AuthRequiredMixin, SuccessMessageMixin, View):
         if form.is_valid():
             form.save()
             return redirect('users_list')
-        return render(request, 'update.html', {'form': form, 'user_id': user_id})
+        return render(request, 'update.html', context={
+            'form': form,
+            'user_id': user_id
+        })
 
 
 class UsersDeleteView(LoginRequiredMixin, View):
@@ -87,7 +95,10 @@ class UsersDeleteView(LoginRequiredMixin, View):
         user_id = kwargs.get('user_id')
         user_model = get_user_model()
         user = user_model.objects.get(id=user_id)
-        return render(request, 'delete.html', {'user': user, 'user_id': user_id})
+        return render(request, 'delete.html', context={
+            'user': user,
+            'user_id': user_id
+        })
 
     def post(self, request, *args, **kwargs):
         user_id = kwargs.get('user_id')
@@ -115,12 +126,12 @@ class LoginUser(View):
                 messages.success(request, "Вы залогинены!")
                 login(request, user)
                 return redirect('index')
-        # messages.error(request, "Ошибка!")
-        # errors = form.errors
-        # return render(request, 'login.html', context={
-        #     'form': form,
-        #     'errors': errors,
-        # })
+        messages.error(request, "Ошибка!")
+        errors = form.errors
+        return render(request, 'login.html', context={
+            'form': form,
+            'errors': errors,
+        })
 
 
 class LogoutView(View):

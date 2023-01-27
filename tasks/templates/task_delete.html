@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% load bootstrap4 %}
+{% load i18n %}
+
+{% block title %}
+Удаление задачи
+{% endblock %}
+
+{% block content %}
+    <h1 class="my-4">Удаление задачи</h1>
+    <p>Вы уверены, что хотите удалить {{ object.name }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <input class="btn btn-danger" type="submit" value="Да, удалить">
+    </form>
+{% endblock %}

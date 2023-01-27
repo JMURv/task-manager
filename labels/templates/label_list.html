@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+Список меток
+{% endblock %}
+
+{% block content %}
+
+  <h1 class="my-4">Метки</h1>
+  <a class="nav-link" href="{% url 'label_create' %}"> Создать метку</a>
+  <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Имя</th>
+          <th scope="col">Дата создания</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for label in object_list %}
+              <tr>
+                  <th scope="row">{{ label.id }}</th>
+                  <td>{{ label.name }}</td>
+                  <td>{{ label.created_at }}</td>
+                  <td>
+                    <a href="{% url 'label_update' label.id %}">Изменить</a>
+                    <br>
+                    <a href="{% url 'label_delete' label.id %}">Удалить</a>
+                  </td>
+              </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% load bootstrap4 %}
+{% load i18n %}
+
+{% block title %}
+Изменить задачу
+{% endblock %}
+
+{% block content %}
+    <h1 class="my-4">Изменение задачи</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons submit='Изменить'%}
+        {% endbuttons %}
+    </form>
+{% endblock %}

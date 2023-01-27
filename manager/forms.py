@@ -17,7 +17,8 @@ class UserForm(UserCreationForm):
 
 
 class LoginForm(Form):
-    username = CharField(widget=TextInput(attrs={'placeholder': 'Username'}))
-    password = CharField(widget=PasswordInput(attrs={'placeholder': 'Password'}))
+    username = CharField(
+        widget=TextInput(attrs={'placeholder': 'Username'}))
+    password = CharField(
+        widget=PasswordInput(attrs={'placeholder': 'Password'}))
     fields = ['username', 'password']
-

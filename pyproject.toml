@@ -11,8 +11,11 @@ python-dotenv = "^0.21.0"
 django-bootstrap4 = "^22.2"
 bootstrap4 = "^0.1.0"
 psycopg2 = "^2.9.5"
+django-filter = "^22.1"
+rollbar = "^0.16.3"
 
 [tool.poetry.dev-dependencies]
+flake8 = "^6.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
