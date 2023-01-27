@@ -1,9 +1,15 @@
+install:
+	poetry install
+
 start:
-	python manage.py runserver
+	poetry run python manage.py runserver
 
 migrate:
-	python manage.py makemigrations
-	python manage.py migrate
+	poetry run python manage.py makemigrations
+	poetry run python manage.py migrate
 
 lint:
 	poetry run flake8
+
+test:
+	poetry run python manage.py test
