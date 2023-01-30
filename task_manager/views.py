@@ -13,7 +13,7 @@ class IndexView(View):
 
 class LoginUserView(SuccessMessageMixin, LoginView):
     template_name = 'login.html'
-    success_message = 'Вы залогинены'
+    success_message = 'Вы залогинены!'
     success_url = reverse_lazy('index')
 
 
