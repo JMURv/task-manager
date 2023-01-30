@@ -20,7 +20,7 @@ class UsersCreateView(SuccessMessageMixin, CreateView):
     model = get_user_model()
     form_class = UserForm
     success_url = reverse_lazy('login_page')
-    success_message = 'Пользователь зарегистрирован'
+    success_message = 'Пользователь успешно зарегистрирован'
 
 
 class UsersUpdateView(
@@ -33,7 +33,7 @@ class UsersUpdateView(
     model = get_user_model()
     form_class = UserForm
     success_url = reverse_lazy('users_list')
-    success_message = 'Пользователь изменён'
+    success_message = 'Пользователь успешно изменён'
 
 
 class UsersDeleteView(
@@ -44,7 +44,7 @@ class UsersDeleteView(
     template_name = 'delete.html'
     model = get_user_model()
     success_url = reverse_lazy('users_list')
-    success_message = 'Пользователь удалён'
+    success_message = 'Пользователь успешно удалён'
 
     def post(self, request, *args, **kwargs):
         if self.get_object().creator.all() or self.get_object().executor.all():
