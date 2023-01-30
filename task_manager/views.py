@@ -14,6 +14,7 @@ class IndexView(View):
 class LoginUserView(SuccessMessageMixin, LoginView):
     template_name = 'login.html'
     success_message = 'Вы залогинены!'
+    redirect_authenticated_user = reverse_lazy('index')
     success_url = reverse_lazy('index')
 
 
