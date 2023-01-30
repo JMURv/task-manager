@@ -18,8 +18,8 @@ jobs:
           run: make lint
         - name: tests run
           run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
-          make test
+            echo "${{ secrets.ENV_FILE }}" > .env
+            make test
         - name: Test & publish code coverage
           uses: paambaati/codeclimate-action@v3.0.0
           env:
