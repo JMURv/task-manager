@@ -18,7 +18,7 @@ class TasksListView(AuthRequiredMixin, FilterView):
 class TaskCreateView(AuthRequiredMixin, SuccessMessageMixin, CreateView):
     template_name = 'task_create.html'
     model = Task
-    success_message = 'Задача создана'
+    success_message = 'Задача успешно создана'
     success_url = reverse_lazy('list_task')
     fields = ['name', 'description', 'status', 'executor', 'labels']
 
@@ -32,7 +32,7 @@ class TaskUpdateView(AuthRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Task
     fields = ['name', 'description', 'executor', 'status', 'labels']
     success_url = reverse_lazy('list_task')
-    success_message = 'Задача изменена'
+    success_message = 'Задача успешно изменена'
 
 
 class TaskDeleteView(
@@ -44,7 +44,7 @@ class TaskDeleteView(
     template_name = 'task_delete.html'
     model = Task
     success_url = reverse_lazy('list_task')
-    success_message = 'Задача удалена'
+    success_message = 'Задача успешно удалена'
 
 
 class TaskDetailView(AuthRequiredMixin, DetailView):
