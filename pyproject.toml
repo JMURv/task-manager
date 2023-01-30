@@ -18,6 +18,7 @@ django-filter = "^22.1"
 rollbar = "^0.16.3"
 django-truncate = "^0.1"
 django-extensions = "^3.2.1"
+dj-database-url = "^1.2.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^6.0.0"

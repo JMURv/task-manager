@@ -58,4 +58,3 @@ class LabelsTest(TestCase):
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('label_list'))
         self.assertEqual(Label.objects.count(), 1)
-
