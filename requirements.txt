@@ -98,6 +98,9 @@ charset-normalizer==3.0.1; python_version >= "3.7" and python_version < "4" \
     --hash=sha256:39cf9ed17fe3b1bc81f33c9ceb6ce67683ee7526e65fde1447c772afc54a1bb8 \
     --hash=sha256:0a11e971ed097d24c534c037d298ad32c6ce81a45736d31e0ff0ad37ab437d59 \
     --hash=sha256:7e189e2e1d3ed2f4aebabd2d5b0f931e883676e51c7624826e0a4e5fe8a0bf24
+dj-database-url==1.2.0 \
+    --hash=sha256:b23b15046cb38180e0c95207bcc90fe5e9dbde8eef16065907dd85cf4ca7036c \
+    --hash=sha256:5c2993b91801c0f78a8b19e642b497b90831124cbade0c265900d4c1037b4730
 django-bootstrap4==22.3; python_version >= "3.7" \
     --hash=sha256:751a7b4196e778286cc5eaa946d1e04741ea10d0b62d2762500f941ef9075dbf \
     --hash=sha256:c2c09d0ad93c96e85e15e5541089aa567fd51257cf80f142ea5b84bbd34dc18e
