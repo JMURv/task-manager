@@ -17,7 +17,9 @@ jobs:
         - name: linter status
           run: make lint
         - name: tests run
-          run: make test
+          run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+          make test
         - name: Test & publish code coverage
           uses: paambaati/codeclimate-action@v3.0.0
           env:
