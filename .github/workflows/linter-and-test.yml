@@ -1,0 +1,26 @@
+name: linter-and-test
+on: [push]
+jobs:
+  Make-lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+        - name: checkout code
+          uses: actions/checkout@v3
+        - name: python install
+          uses: actions/setup-python@v4
+          with:
+            python-version: '3.9'
+        - name: install poetry
+          run: pip install poetry
+        - name: poetry dependencies
+          run: make install
+        - name: linter status
+          run: make lint
+        - name: tests run
+          run: make test
+        - name: Test & publish code coverage
+          uses: paambaati/codeclimate-action@v3.0.0
+          env:
+            CC_TEST_REPORTER_ID: 551eab0328fc689b8741d1c7aa9c9a09a18af780186d1aa48935f728f340ee24
+          with:
+            coverageCommand: make test-cov
