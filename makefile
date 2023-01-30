@@ -12,7 +12,7 @@ lint:
 	poetry run flake8
 
 test:
-	poetry run python manage.py test
+	poetry run python manage.py test .
 
 req:
 	poetry export -f requirements.txt --output requirements.txt
