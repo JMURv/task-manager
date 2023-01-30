@@ -18,7 +18,7 @@ jobs:
           run: make lint
         - name: tests run
           env:
-            SECRET_KEY: ${{ secrets.SECRET_KEY }}
+            SECRET_KEY: k17!@8i8(7wh3e49r$s643^vcdzku(9u@(ipj4-o3r-lbmh*o=
           run: make test
         - name: Test & publish code coverage
           uses: paambaati/codeclimate-action@v3.0.0
