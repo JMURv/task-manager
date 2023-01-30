@@ -30,7 +30,7 @@ class TaskDeletePermissionMixin:
 
 class SelfEditPermissionMixin:
     def get(self, request, *args, **kwargs):
-        self.permission_denied_message = 'У вас нет прав для изменения другого пользователя.'  # noqa: E501
+        self.permission_denied_message = 'У вас нет прав для изменения другого пользователя.'
         self.permission_denied_url = reverse_lazy('users_list')
         self.object = self.get_object()
 

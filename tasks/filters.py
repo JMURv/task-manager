@@ -17,7 +17,7 @@ class TaskFilter(django_filters.FilterSet):
         label='Метка'
     )
 
-    def filter_self_tasks(self, queryset, value):
+    def filter_self_tasks(self, queryset, smth, value):
         if value:
             return queryset.filter(creator=self.request.user)
         return queryset
