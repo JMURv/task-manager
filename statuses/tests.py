@@ -1,29 +1,21 @@
 from django.test import TestCase
 from django.urls import reverse
 from statuses.models import Status
-from users.models import User
+from django.contrib.auth import get_user_model
 
 
 class StatusTest(TestCase):
+    fixtures = ['users.json', 'statuses.json']
 
-    def setUp(self) -> None:
-        User.objects.create(
-            first_name='Vladimir',
-            last_name='Zhmur',
-            username='jmurvv',
-            email='architect.lock@outlook.com',
-            password='794613825Zx'
-        )
-        self.user = User.objects.get(username='jmurvv')
-        Status.objects.create(name='status_1')
+    def setUp(self):
+        self.user = get_user_model().objects.first()
+        self.client.force_login(self.user)
 
     def test_list(self):
-        self.client.force_login(self.user)
         resp = self.client.get(reverse('status_list'))
         self.assertTrue(len(resp.context['object_list']) == 1)
 
     def test_create(self):
-        self.client.force_login(self.user)
         resp = self.client.post(reverse('create_status'), {'name': 'status2'})
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('status_list'))
@@ -31,7 +23,6 @@ class StatusTest(TestCase):
         self.assertTrue(len(resp.context['object_list']) == 2)
 
     def test_update(self):
-        self.client.force_login(self.user)
         tested_status = Status.objects.get(name='status_1')
         self.assertEqual(tested_status.name, 'status_1')
 
@@ -45,7 +36,6 @@ class StatusTest(TestCase):
         self.assertEqual(tested_status.name, 'UpdatedName')
 
     def test_DeleteStatus(self):
-        self.client.force_login(self.user)
         tested_status = Status.objects.get(name='status_1')
         self.assertEqual(Status.objects.count(), 1)
         resp = self.client.post(

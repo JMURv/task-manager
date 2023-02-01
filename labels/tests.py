@@ -1,31 +1,23 @@
 from django.test import TestCase
-from users.models import User
 from labels.models import Label
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 
 class LabelsTest(TestCase):
+    fixtures = ['users.json', 'labels.json']
+
     def setUp(self) -> None:
-        User.objects.create(
-            first_name='Vladimir',
-            last_name='Zhmur',
-            username='jmurv',
-            email='architect.lock@outlook.com',
-            password='794613825Zx'
-        )
-        self.user = User.objects.get(username='jmurv')
-        Label.objects.create(name='label_1')
-        Label.objects.create(name='label_2')
+        self.user = get_user_model().objects.first()
+        self.client.force_login(self.user)
 
     def test_list(self):
-        self.client.force_login(self.user)
         resp = self.client.get(
             path=reverse('label_list')
         )
         self.assertEqual(len(resp.context['object_list']), 2)
 
     def test_create(self):
-        self.client.force_login(self.user)
         resp = self.client.post(
             path=reverse('label_create'),
             data={'name': 'TestLabelName'}
@@ -38,7 +30,6 @@ class LabelsTest(TestCase):
         self.assertEqual(len(resp.context['object_list']), 3)
 
     def test_update(self):
-        self.client.force_login(self.user)
         tested_label = Label.objects.get(name='label_1')
         resp = self.client.post(
             path=reverse('label_update', kwargs={'pk': tested_label.id}),
@@ -49,7 +40,6 @@ class LabelsTest(TestCase):
         self.assertEqual(tested_label.name, 'UpdateLabelName')
 
     def test_delete(self):
-        self.client.force_login(self.user)
         tested_label = Label.objects.get(name='label_1')
         self.assertEqual(Label.objects.count(), 2)
         resp = self.client.post(

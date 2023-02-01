@@ -3,3 +3,8 @@
 .venv/
 .coverage
 /__pycache__/
+task_manager/__pycache__
+labels/__pycache__
+statuses/__pycache__
+users/__pycache__
+tasks/__pycache__

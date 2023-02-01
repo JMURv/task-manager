@@ -1,0 +1,36 @@
+[
+{
+  "model": "users.user",
+  "pk": 1,
+  "fields": {
+              "password": "794613825Zx",
+              "last_login": null,
+              "is_superuser": false,
+              "username": "jmurv",
+              "first_name": "Vladimir",
+              "last_name": "Zhmur",
+              "email": "architect.lock@outlook.com",
+              "is_staff": false,
+              "is_active": true,
+              "groups": [],
+              "user_permissions": []
+  }
+},
+  {
+  "model": "users.user",
+  "pk": 2,
+  "fields": {
+              "password": "794613825Ak",
+              "last_login": null,
+              "is_superuser": false,
+              "username": "Homyak07",
+              "first_name": "Anastasiya",
+              "last_name": "Kolupaeva",
+              "email": "anastasiyakolupaeva@mail.ru",
+              "is_staff": false,
+              "is_active": true,
+              "groups": [],
+              "user_permissions": []
+  }
+}
+]

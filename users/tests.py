@@ -5,22 +5,7 @@ from django.urls import reverse
 
 class UsersTest(TestCase):
 
-    @classmethod
-    def setUpTestData(cls):
-        User.objects.create(
-            first_name='Vladimir',
-            last_name='Zhmur',
-            username='jmurv',
-            email='architect.lock@outlook.com',
-            password='794613825Zx'
-        )
-        User.objects.create(
-            first_name='Anastasiya',
-            last_name='Kolupaeva',
-            username='Homyak07',
-            email='anastasiyakolupaeva@mail.ru',
-            password='794613825Ak'
-        )
+    fixtures = ['users.json']
 
     def test_create(self):
         resp = self.client.get(reverse('create_user'))
@@ -60,7 +45,6 @@ class UsersTest(TestCase):
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('login_page'))
 
-        # Проходим аутентификацию
         self.client.force_login(user)
         resp = self.client.get(
             reverse('update_user', kwargs={'pk': user.id})
@@ -68,7 +52,6 @@ class UsersTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, template_name='update.html')
 
-        # Изменяем данные пользователя
         resp = self.client.post(
             reverse('update_user', kwargs={'pk': user.id}),
             {
@@ -92,6 +75,12 @@ class UsersTest(TestCase):
         self.assertRedirects(resp, reverse('users_list'))
 
         self.client.force_login(user)
+
+        resp = self.client.get(reverse('delete_user', kwargs={'pk': 2}))
+        self.assertEqual(resp.status_code, 302)
+        self.assertRedirects(resp, reverse('users_list'))
+        self.assertEqual(User.objects.count(), 2)
+
         resp = self.client.get(reverse('delete_user', kwargs={'pk': user.id}))
         self.assertEqual(resp.status_code, 200)
 
