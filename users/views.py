@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from task_manager.mixins import SelfEditPermissionMixin
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -8,6 +10,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from django.shortcuts import redirect
 from task_manager.mixins import AuthRequiredMixin
+from django.utils.translation import gettext_lazy as _
 
 
 class UsersView(ListView):
@@ -20,7 +23,7 @@ class UsersCreateView(SuccessMessageMixin, CreateView):
     model = get_user_model()
     form_class = UserForm
     success_url = reverse_lazy('login_page')
-    success_message = 'Пользователь успешно зарегистрирован'
+    success_message = _('User created successfully')
 
 
 class UsersUpdateView(
@@ -33,7 +36,7 @@ class UsersUpdateView(
     model = get_user_model()
     form_class = UserForm
     success_url = reverse_lazy('users_list')
-    success_message = 'Пользователь успешно изменён'
+    success_message = _('User successfully changed')
 
 
 class UsersDeleteView(
@@ -44,13 +47,13 @@ class UsersDeleteView(
     template_name = 'delete.html'
     model = get_user_model()
     success_url = reverse_lazy('users_list')
-    success_message = 'Пользователь успешно удалён'
+    success_message = _('User successfully deleted')
 
     def post(self, request, *args, **kwargs):
         if self.get_object().creator.all() or self.get_object().executor.all():
             messages.error(
                 self.request,
-                'Невозможно удалить пользователя, потому что он используется'
+                _("Can't delete, user in use")
             )
             return redirect('status_list')
 

@@ -6,6 +6,7 @@ from labels.models import Label
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from task_manager.mixins import AuthRequiredMixin
+from django.utils.translation import gettext_lazy as _
 
 
 class LabelListView(AuthRequiredMixin, ListView):
@@ -19,20 +20,20 @@ class LabelCreateView(AuthRequiredMixin, SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('label_list')
     model = Label
     fields = '__all__'
-    success_message = 'Метка успешно создана'
+    success_message = _("Label created successfully")
 
 
 class LabelDeleteView(AuthRequiredMixin, SuccessMessageMixin, DeleteView):
     template_name = 'label_delete.html'
     model = Label
     success_url = reverse_lazy('label_list')
-    success_message = 'Метка успешно удалена'
+    success_message = _('Label successfully deleted')
 
     def post(self, request, *args, **kwargs):
         if self.get_object().task_set.all():
             messages.error(
                 self.request,
-                'Невозможно удалить метку, потому что она используется'
+                _("Can't delete, label in use")
             )
             return redirect('label_list')
 
@@ -43,5 +44,5 @@ class LabelUpdateView(AuthRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = 'label_update.html'
     model = Label
     fields = '__all__'
-    success_message = 'Метка успешно изменена'
+    success_message = _('Label successfully changed')
     success_url = reverse_lazy('label_list')

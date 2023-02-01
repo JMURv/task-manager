@@ -1,12 +1,12 @@
 from .models import Task
 from .filters import TaskFilter
-
 from django.urls import reverse_lazy
 from django_filters.views import FilterView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.detail import DetailView
 from django.contrib.messages.views import SuccessMessageMixin
 from task_manager.mixins import AuthRequiredMixin, TaskDeletePermissionMixin
+from django.utils.translation import gettext_lazy as _
 
 
 class TasksListView(AuthRequiredMixin, FilterView):
@@ -18,7 +18,7 @@ class TasksListView(AuthRequiredMixin, FilterView):
 class TaskCreateView(AuthRequiredMixin, SuccessMessageMixin, CreateView):
     template_name = 'task_create.html'
     model = Task
-    success_message = 'Задача успешно создана'
+    success_message = _("Task created successfully")
     success_url = reverse_lazy('list_task')
     fields = ['name', 'description', 'status', 'executor', 'labels']
 
@@ -32,7 +32,7 @@ class TaskUpdateView(AuthRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Task
     fields = ['name', 'description', 'executor', 'status', 'labels']
     success_url = reverse_lazy('list_task')
-    success_message = 'Задача успешно изменена'
+    success_message = _('Task successfully changed')
 
 
 class TaskDeleteView(
@@ -44,7 +44,7 @@ class TaskDeleteView(
     template_name = 'task_delete.html'
     model = Task
     success_url = reverse_lazy('list_task')
-    success_message = 'Задача успешно удалена'
+    success_message = _('Task successfully deleted')
 
 
 class TaskDetailView(AuthRequiredMixin, DetailView):

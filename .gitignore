@@ -2,4 +2,4 @@
 .env
 .venv/
 .coverage
-__pycache__
+/__pycache__/
