@@ -20,7 +20,8 @@ class AuthRequiredMixin(LoginRequiredMixin):
 
 class TaskDeletePermissionMixin:
     def get(self, request, *args, **kwargs):
-        self.permission_denied_message = _("You can't delete this task. Only author can")
+        self.permission_denied_message = _("You can't delete this task."
+                                           " Only author can")
         self.permission_denied_url = reverse_lazy('list_task')
         self.object = self.get_object()
 

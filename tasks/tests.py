@@ -1,7 +1,5 @@
 from django.test import TestCase
 from django.urls import reverse
-from users.models import User
-from tasks.models import Task
 from statuses.models import Status
 from labels.models import Label
 from django.contrib.auth import get_user_model
