@@ -2,6 +2,7 @@
 .env
 .venv/
 .coverage
+coverage.xml
 /__pycache__/
 task_manager/__pycache__
 labels/__pycache__

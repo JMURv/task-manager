@@ -1,45 +1,46 @@
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 
 class AuthRequiredMixin(LoginRequiredMixin):
-    def dispatch(self, request, *args, **kwargs):
-        self.permission_denied_message = _('You are not authorized!')
-        self.permission_denied_url = reverse_lazy('login_page')
-        if not request.user.is_authenticated:
+
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
             messages.error(
-                request,
-                messages.error(self.request, self.permission_denied_message)
+                self.request,
+                _('You are not authorized!')
             )
-            return redirect('login_page')
+            return redirect(reverse_lazy('login_page'))
+
+
+class TaskDeletePermissionMixin(UserPassesTestMixin):
+
+    def dispatch(self, request, *args, **kwargs):
+        user_test_result = self.test_func()
+        if not user_test_result:
+            messages.error(
+                self.request,
+                _("You can't delete this task. Only author can"))
+            return redirect(reverse_lazy('list_task'))
         return super().dispatch(request, *args, **kwargs)
 
-
-class TaskDeletePermissionMixin:
-    def get(self, request, *args, **kwargs):
-        self.permission_denied_message = _("You can't delete this task."
-                                           " Only author can")
-        self.permission_denied_url = reverse_lazy('list_task')
+    def test_func(self):
         self.object = self.get_object()
-
-        if self.object.creator == self.request.user:
-            return super().get(request, *args, **kwargs)
-        else:
-            messages.error(self.request, self.permission_denied_message)
-            return redirect(self.permission_denied_url)
+        return self.object.creator == self.request.user
 
 
-class SelfEditPermissionMixin:
-    def get(self, request, *args, **kwargs):
-        self.permission_denied_message = _("You have't permission!")
-        self.permission_denied_url = reverse_lazy('users_list')
+class SelfEditPermissionMixin(UserPassesTestMixin):
+
+    def dispatch(self, request, *args, **kwargs):
+        user_test_result = self.test_func()
+        if not user_test_result:
+            messages.error(self.request, _("You have't permission!"))
+            return redirect(reverse_lazy('users_list'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def test_func(self):
         self.object = self.get_object()
-
-        if self.object == self.request.user:
-            return super().get(request, *args, **kwargs)
-        else:
-            messages.error(self.request, self.permission_denied_message)
-            return redirect(self.permission_denied_url)
+        return self.object == self.request.user

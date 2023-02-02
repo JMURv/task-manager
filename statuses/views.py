@@ -39,7 +39,7 @@ class StatusDeleteView(AuthRequiredMixin, SuccessMessageMixin, DeleteView):
     success_message = _('Status successfully deleted')
 
     def post(self, request, *args, **kwargs):
-        if self.get_object().task_set.all():
+        if self.get_object().task_set.exists():
             messages.error(
                 self.request,
                 _("Can't delete, status in use")

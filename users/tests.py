@@ -72,7 +72,7 @@ class UsersTest(TestCase):
         user = User.objects.get(username='jmurv')
         resp = self.client.get(reverse('delete_user', kwargs={'pk': user.id}))
         self.assertEqual(resp.status_code, 302)
-        self.assertRedirects(resp, reverse('users_list'))
+        self.assertRedirects(resp, reverse('login_page'))
 
         self.client.force_login(user)
 

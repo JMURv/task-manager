@@ -6,7 +6,6 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Task(models.Model):
-    objects = models.Manager()
     name = models.CharField(
         verbose_name=_('Task name'),
         max_length=200,

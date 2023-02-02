@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 
 class StatusTest(TestCase):
-    fixtures = ['users.json', 'statuses.json']
+    fixtures = ['users.json', 'statuses.json', 'tasks.json']
 
     def setUp(self):
         self.user = get_user_model().objects.first()
@@ -42,4 +42,18 @@ class StatusTest(TestCase):
             path=reverse('delete_status', kwargs={'pk': tested_status.id})
         )
         self.assertEqual(resp.status_code, 302)
-        self.assertEqual(Status.objects.count(), 0)
+        # Статус не удалить, т.к он привязан к задаче
+        self.assertEqual(Status.objects.count(), 1)
+        # Создаём новый статус
+        resp = self.client.post(reverse('create_status'), {'name': 'status2'})
+        self.assertRedirects(resp, reverse('status_list'))
+        resp = self.client.get(reverse('status_list'))
+        self.assertTrue(len(resp.context['object_list']) == 2)
+        # Удаляем новый статус
+        tested_status = Status.objects.get(name='status2')
+        resp = self.client.post(
+            path=reverse('delete_status', kwargs={'pk': tested_status.id})
+        )
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(Status.objects.count(), 1)
+
