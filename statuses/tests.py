@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 
 class StatusTest(TestCase):
-    fixtures = ['users.json', 'statuses.json', 'tasks.json']
+    fixtures = ['users.json', 'statuses.json', 'tasks.json', 'labels.json']
 
     def setUp(self):
         self.user = get_user_model().objects.first()
@@ -56,4 +56,3 @@ class StatusTest(TestCase):
         )
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(Status.objects.count(), 1)
-

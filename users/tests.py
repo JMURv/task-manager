@@ -1,6 +1,7 @@
 from django.test import TestCase
 from users.models import User
 from django.urls import reverse
+import json
 
 
 class UsersTest(TestCase):
@@ -12,15 +13,12 @@ class UsersTest(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertTemplateUsed(resp, template_name='create.html')
 
+        with open('users/fixtures/test_data.json', 'r') as user_info:
+            new_user = json.load(user_info)
+
         resp = self.client.post(
             reverse('create_user'),
-            {
-                'first_name': 'Vladimir',
-                'last_name': 'Epshteyn',
-                'username': 'pussydestroyer228',
-                'password1': '794613825Ve',
-                'password2': '794613825Ve',
-            }
+            new_user
         )
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('login_page'))

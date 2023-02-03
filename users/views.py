@@ -51,7 +51,8 @@ class UsersDeleteView(
     success_message = _('User successfully deleted')
 
     def post(self, request, *args, **kwargs):
-        if self.get_object().creator.exists() or self.get_object().executor.exists():
+        if self.get_object().creator.exists() or \
+                self.get_object().executor.exists():
             messages.error(
                 self.request,
                 _("Can't delete, user in use")

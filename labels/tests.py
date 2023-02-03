@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 
 class LabelsTest(TestCase):
-    fixtures = ['users.json', 'labels.json']
+    fixtures = ['users.json', 'labels.json', 'tasks.json', 'statuses.json']
 
     def setUp(self) -> None:
         self.user = get_user_model().objects.first()
@@ -15,7 +15,7 @@ class LabelsTest(TestCase):
         resp = self.client.get(
             path=reverse('label_list')
         )
-        self.assertEqual(len(resp.context['object_list']), 2)
+        self.assertEqual(len(resp.context['object_list']), 3)
 
     def test_create(self):
         resp = self.client.post(
@@ -27,7 +27,7 @@ class LabelsTest(TestCase):
         resp = self.client.get(
             path=reverse('label_list')
         )
-        self.assertEqual(len(resp.context['object_list']), 3)
+        self.assertEqual(len(resp.context['object_list']), 4)
 
     def test_update(self):
         tested_label = Label.objects.get(name='label_1')
@@ -41,10 +41,19 @@ class LabelsTest(TestCase):
 
     def test_delete(self):
         tested_label = Label.objects.get(name='label_1')
-        self.assertEqual(Label.objects.count(), 2)
+        self.assertEqual(Label.objects.count(), 3)
+        # Пытаемся удалить метку, прикрепленную к задаче
         resp = self.client.post(
             path=reverse('label_delete', kwargs={'pk': tested_label.id})
         )
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('label_list'))
-        self.assertEqual(Label.objects.count(), 1)
+        self.assertEqual(Label.objects.count(), 3)
+        # Метка, не прикрепленная к задаче
+        tested_label = Label.objects.get(name='label_3')
+        resp = self.client.post(
+            path=reverse('label_delete', kwargs={'pk': tested_label.id})
+        )
+        self.assertEqual(resp.status_code, 302)
+        self.assertRedirects(resp, reverse('label_list'))
+        self.assertEqual(Label.objects.count(), 2)
