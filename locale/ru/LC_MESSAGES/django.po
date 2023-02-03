@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-01 03:17+0300\n"
+"POT-Creation-Date: 2023-02-03 03:32+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: .\labels\models.py:7
+#: .\labels\models.py:9
 msgid "Label name"
 msgstr "Имя"
 
-#: .\labels\models.py:8 .\statuses\models.py:14
+#: .\labels\models.py:13 .\statuses\models.py:14
 msgid "Created"
 msgstr "Создать"
 
@@ -41,6 +41,10 @@ msgstr "Невозможно удалить метку, потому что он
 #: .\labels\views.py:47
 msgid "Label successfully changed"
 msgstr "Метка успешно изменена"
+
+#: .\statuses\forms.py:13
+msgid "Name"
+msgstr "Имя"
 
 #: .\statuses\models.py:10
 msgid "Status name"
@@ -62,15 +66,15 @@ msgstr "Статус успешно удалён"
 msgid "Can't delete, status in use"
 msgstr "Невозможно удалить статус, потому что он используется"
 
-#: .\task_manager\mixins.py:10
+#: .\task_manager\mixins.py:14
 msgid "You are not authorized!"
 msgstr "Вы не авторизованы!"
 
-#: .\task_manager\mixins.py:23
+#: .\task_manager\mixins.py:26
 msgid "You can't delete this task. Only author can"
 msgstr "Задачу может удалить только её автор"
 
-#: .\task_manager\mixins.py:36
+#: .\task_manager\mixins.py:40
 msgid "You have't permission!"
 msgstr "У вас нет прав для изменения другого пользователя"
 
@@ -82,27 +86,27 @@ msgstr "Вы залогинены"
 msgid "Successfully logout"
 msgstr "Вы разлогинены"
 
-#: .\tasks\models.py:11
+#: .\tasks\models.py:10
 msgid "Task name"
 msgstr "Имя"
 
-#: .\tasks\models.py:17
+#: .\tasks\models.py:16
 msgid "Description"
 msgstr "Описание"
 
-#: .\tasks\models.py:23
+#: .\tasks\models.py:22
 msgid "Author"
 msgstr "Автор"
 
-#: .\tasks\models.py:29
+#: .\tasks\models.py:28
 msgid "Executor"
 msgstr "Исполнитель"
 
-#: .\tasks\models.py:36
+#: .\tasks\models.py:35
 msgid "Status"
 msgstr "Статус"
 
-#: .\tasks\models.py:42
+#: .\tasks\models.py:41
 msgid "Label"
 msgstr "Метки"
 
@@ -126,10 +130,10 @@ msgstr "Пользователь успешно зарегистрирован"
 msgid "User successfully changed"
 msgstr "Пользователь успешно изменён"
 
-#: .\users\views.py:50
+#: .\users\views.py:51
 msgid "User successfully deleted"
 msgstr "Пользователь успешно удалён"
 
-#: .\users\views.py:56
+#: .\users\views.py:58
 msgid "Can't delete, user in use"
 msgstr "Невозможно удалить пользователя, потому что он используется"
