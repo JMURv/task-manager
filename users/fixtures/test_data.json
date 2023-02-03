@@ -1,7 +1,16 @@
-{
-  "first_name": "Vladimir",
-  "last_name": "Epshteyn",
-  "username": "pussydestroyer228",
-  "password1": "794613825Ve",
-  "password2": "794613825Ve"
-}
+[
+  {
+    "first_name": "Vladimir",
+    "last_name": "Epshteyn",
+    "username": "pussydestroyer228",
+    "password1": "794613825Ve",
+    "password2": "794613825Ve"
+  },
+  {
+    "first_name": "TestName",
+    "last_name": "TestLastName",
+    "username": "TestUsername",
+    "password1": "TestPassword123",
+    "password2": "TestPassword123"
+  }
+]
