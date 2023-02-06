@@ -6,14 +6,12 @@ from django.utils.translation import gettext_lazy as _
 
 
 class AuthRequiredMixin(LoginRequiredMixin):
-
     def handle_no_permission(self):
-        if not self.request.user.is_authenticated:
-            messages.error(
-                self.request,
-                _('You are not authorized!')
-            )
-            return redirect(reverse_lazy('login_page'))
+        messages.error(
+            self.request,
+            _('You are not authorized!')
+        )
+        return super().handle_no_permission()
 
 
 class TaskDeletePermissionMixin(UserPassesTestMixin):

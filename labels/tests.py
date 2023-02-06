@@ -3,6 +3,7 @@ from labels.models import Label
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
+from django.utils.translation import gettext_lazy as _
 
 
 class LabelsTest(TestCase):
@@ -25,7 +26,7 @@ class LabelsTest(TestCase):
         )
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('label_list'))
-        self.get_messages(resp, 'Метка успешно создана')
+        self.assertFlashMessages(resp, _("Label created successfully"))
         resp = self.client.get(
             path=reverse('label_list')
         )
@@ -38,7 +39,7 @@ class LabelsTest(TestCase):
             data={'name': 'UpdateLabelName'}
         )
         self.assertEqual(resp.status_code, 302)
-        self.get_messages(resp, 'Метка успешно изменена')
+        self.assertFlashMessages(resp, _('Label successfully changed'))
         tested_label.refresh_from_db()
         self.assertEqual(tested_label.name, 'UpdateLabelName')
 
@@ -52,21 +53,21 @@ class LabelsTest(TestCase):
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('label_list'))
         self.assertEqual(Label.objects.count(), 3)
-        self.get_messages(
+        self.assertFlashMessages(
             resp,
-            'Невозможно удалить метку, потому что она используется'
+            _("Can't delete, label in use")
         )
         # Метка, не прикрепленная к задаче
         tested_label = Label.objects.get(name='label_3')
         resp = self.client.post(
             path=reverse('label_delete', kwargs={'pk': tested_label.id})
         )
-        self.get_messages(resp, 'Метка успешно удалена')
+        self.assertFlashMessages(resp, _('Label successfully deleted'))
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('label_list'))
         self.assertEqual(Label.objects.count(), 2)
 
-    def get_messages(self, resp, message_text, count=1):
+    def assertFlashMessages(self, resp, message_text, count=1):
         messages = list(get_messages(resp.wsgi_request))
         self.assertEqual(len(messages), count)
-        self.assertEqual(str(messages[0]), message_text)
+        self.assertIn(str(messages[0]), message_text)

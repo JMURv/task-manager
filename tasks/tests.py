@@ -6,6 +6,7 @@ from users.models import User
 from tasks.models import Task
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
+from django.utils.translation import gettext_lazy as _
 
 
 class TasksTest(TestCase):
@@ -45,7 +46,7 @@ class TasksTest(TestCase):
             }
         )
         self.assertEqual(resp.status_code, 302)
-        self.get_messages(resp, 'Задача успешно создана')
+        self.assertFlashMessages(resp, _("Task created successfully"))
         self.assertRedirects(resp, reverse('list_task'))
 
         resp = self.client.get(reverse('list_task'))
@@ -65,7 +66,7 @@ class TasksTest(TestCase):
         )
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('list_task'))
-        self.get_messages(resp, 'Задача успешно изменена')
+        self.assertFlashMessages(resp, _('Task successfully changed'))
 
         task = Task.objects.get(name='UpdatedName')
         self.assertEqual(task.name, 'UpdatedName')
@@ -78,7 +79,7 @@ class TasksTest(TestCase):
     def test_delete_task(self):
         task = Task.objects.get(name='TestTask')
         resp = self.client.post(reverse('task_delete', kwargs={'pk': task.id}))
-        self.get_messages(resp, 'Задача успешно удалена')
+        self.assertFlashMessages(resp, _('Task successfully deleted'))
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('list_task'))
 
@@ -87,9 +88,13 @@ class TasksTest(TestCase):
 
         task = Task.objects.get(name='TestSecondTask')
         resp = self.client.post(reverse('task_delete', kwargs={'pk': task.id}))
-        self.get_messages(resp, 'Задачу может удалить только её автор')
+        self.assertFlashMessages(
+            resp,
+            _("You can't delete this task. Only author can")
+        )
 
-    def get_messages(self, resp, message_text, message_count=1, message_id=0):
+    def assertFlashMessages(self, resp, message_text,
+                            message_count=1, message_id=0):
         messages = list(get_messages(resp.wsgi_request))
         self.assertEqual(len(messages), message_count)
         self.assertEqual(str(messages[message_id]), message_text)

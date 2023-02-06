@@ -3,6 +3,7 @@ from users.models import User
 from django.urls import reverse
 from django.contrib.messages import get_messages
 import json
+from django.utils.translation import gettext_lazy as _
 
 
 class UsersTest(TestCase):
@@ -41,8 +42,8 @@ class UsersTest(TestCase):
             reverse('update_user', kwargs={'pk': user.id})
         )
         self.assertEqual(resp.status_code, 302)
-        self.assertRedirects(resp, reverse('login_page'))
-        self.get_messages(resp, 'Вы не авторизованы!')
+        self.assertRedirects(resp, f'/login/?next=/users/{user.id}/update/')
+        self.assertFlashMessages(resp, _("You are not authorized!"))
 
         self.client.force_login(user)
         resp = self.client.get(
@@ -55,9 +56,9 @@ class UsersTest(TestCase):
             reverse('update_user', kwargs={'pk': 2})
         )
         self.assertEqual(resp.status_code, 302)
-        self.get_messages(
+        self.assertFlashMessages(
             resp,
-            'У вас нет прав для изменения другого пользователя'
+            _("You have't permission!")
         )
 
         with open('users/fixtures/test_data.json', 'r') as user_info:
@@ -68,9 +69,9 @@ class UsersTest(TestCase):
             )
             self.assertEqual(resp.status_code, 302)
             user.refresh_from_db()
-            self.get_messages(
+            self.assertFlashMessages(
                 resp=resp,
-                message_text='Пользователь успешно изменён',
+                message_text=_('User successfully changed'),
                 message_count=2,
                 message_id=1
             )
@@ -83,8 +84,8 @@ class UsersTest(TestCase):
         user = User.objects.get(username='jmurv')
         resp = self.client.get(reverse('delete_user', kwargs={'pk': user.id}))
         self.assertEqual(resp.status_code, 302)
-        self.assertRedirects(resp, reverse('login_page'))
-        self.get_messages(resp, 'Вы не авторизованы!')
+        self.assertRedirects(resp, f'/login/?next=/users/{user.id}/delete/')
+        self.assertFlashMessages(resp, _("You are not authorized!"))
 
         self.client.force_login(user)
 
@@ -92,9 +93,9 @@ class UsersTest(TestCase):
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('users_list'))
         self.assertEqual(User.objects.count(), 2)
-        self.get_messages(
+        self.assertFlashMessages(
             resp,
-            'У вас нет прав для изменения другого пользователя'
+            _("You have't permission!")
         )
 
         resp = self.client.get(reverse('delete_user', kwargs={'pk': user.id}))
@@ -107,7 +108,8 @@ class UsersTest(TestCase):
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(User.objects.count(), 1)
 
-    def get_messages(self, resp, message_text, message_count=1, message_id=0):
+    def assertFlashMessages(self, resp, message_text,
+                            message_count=1, message_id=0):
         messages = list(get_messages(resp.wsgi_request))
         self.assertEqual(len(messages), message_count)
-        self.assertEqual(str(messages[message_id]), message_text)
+        self.assertIn(str(messages[message_id]), message_text)

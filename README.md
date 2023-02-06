@@ -17,7 +17,7 @@ ___
 - Система трекинга ошибок через Rollbar
 
 ### Как установить?
-0. Настройте ваши переменные окружения: SECRET_KEY, DATABASE_URL, ROLLBAR_TOKEN
-1. `git clone https://github.com/JMURv/python-project-52.git`
-2. `make ready`
-3. Через секунду приложение доступно на localhost
+1. Настройте ваши переменные окружения через .env файл: SECRET_KEY, DATABASE_URL, ROLLBAR_TOKEN
+2. `git clone https://github.com/JMURv/python-project-52.git`
+3. `make ready`
+4. Через секунду приложение доступно на localhost

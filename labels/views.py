@@ -30,7 +30,7 @@ class LabelDeleteView(AuthRequiredMixin, SuccessMessageMixin, DeleteView):
     success_message = _('Label successfully deleted')
 
     def post(self, request, *args, **kwargs):
-        if self.get_object().task_set.all():
+        if self.get_object().task_set.exists():
             messages.error(
                 self.request,
                 _("Can't delete, label in use")
