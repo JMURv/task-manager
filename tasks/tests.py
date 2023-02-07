@@ -47,7 +47,8 @@ class TasksTest(TestCase):
             self.assertRedirects(resp, reverse('list_task'))
 
             resp = self.client.get(reverse('list_task'))
-            self.assertTrue(len(resp.context['object_list']) == tasks_count+1)
+            self.assertTrue(
+                len(resp.context['object_list']) == tasks_count + 1)
 
     def test_update_task(self):
         with open('tasks/fixtures/test_data.json', 'r') as task_info:
@@ -78,7 +79,7 @@ class TasksTest(TestCase):
         self.assertRedirects(resp, reverse('list_task'))
 
         resp = self.client.get(reverse('list_task'))
-        self.assertTrue(len(resp.context['object_list']) == tasks_count-1)
+        self.assertTrue(len(resp.context['object_list']) == tasks_count - 1)
 
         task = Task.objects.get(name='TestSecondTask')
         resp = self.client.post(reverse('task_delete', kwargs={'pk': task.id}))

@@ -34,7 +34,7 @@ class LabelsTest(TestCase):
         resp = self.client.get(
             path=reverse('label_list')
         )
-        self.assertEqual(len(resp.context['object_list']), labels_count+1)
+        self.assertEqual(len(resp.context['object_list']), labels_count + 1)
 
     def test_update(self):
         tested_label = Label.objects.get(name='label_1')
@@ -71,7 +71,7 @@ class LabelsTest(TestCase):
         self.assertFlashMessages(resp, _('Label successfully deleted'))
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('label_list'))
-        self.assertEqual(Label.objects.count(), labels_count-1)
+        self.assertEqual(Label.objects.count(), labels_count - 1)
 
     def assertFlashMessages(self, resp, message_text):
         messages = [

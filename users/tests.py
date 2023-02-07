@@ -105,7 +105,7 @@ class UsersTest(TestCase):
         )
         self.assertRedirects(resp, reverse('users_list'))
         self.assertEqual(resp.status_code, 302)
-        self.assertEqual(User.objects.count(), users_count-1)
+        self.assertEqual(User.objects.count(), users_count - 1)
 
     def assertFlashMessages(self, resp, message_text):
         messages = [

@@ -28,7 +28,7 @@ class StatusTest(TestCase):
             self.assertFlashMessages(resp, _("Status created successfully"))
 
         resp = self.client.get(reverse('status_list'))
-        self.assertTrue(len(resp.context['object_list']) == status_count+1)
+        self.assertTrue(len(resp.context['object_list']) == status_count + 1)
 
     def test_update(self):
         tested_status = Status.objects.get(name='status_1')
@@ -63,7 +63,7 @@ class StatusTest(TestCase):
         resp = self.client.post(reverse('create_status'), {'name': 'status2'})
         self.assertRedirects(resp, reverse('status_list'))
         resp = self.client.get(reverse('status_list'))
-        self.assertTrue(len(resp.context['object_list']) == status_count+1)
+        self.assertTrue(len(resp.context['object_list']) == status_count + 1)
         # Удаляем новый статус
         tested_status = Status.objects.get(name='status2')
         resp = self.client.post(
