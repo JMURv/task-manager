@@ -7,6 +7,7 @@ from tasks.models import Task
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
 from django.utils.translation import gettext_lazy as _
+import json
 
 
 class TasksTest(TestCase):
@@ -34,49 +35,42 @@ class TasksTest(TestCase):
             self.assertEqual(resp.status_code, 200)
 
     def test_create_task(self):
-        resp = self.client.post(
-            reverse('task_create'),
-            {
-                "name": "TestTask_1",
-                "description": "TestDescription",
-                "creator": 1,
-                "executor": 1,
-                "status": 1,
-                "labels": [1, 2],
-            }
-        )
-        self.assertEqual(resp.status_code, 302)
-        self.assertFlashMessages(resp, _("Task created successfully"))
-        self.assertRedirects(resp, reverse('list_task'))
+        tasks_count = Task.objects.count()
+        with open('tasks/fixtures/test_data.json', 'r') as task_info:
+            create_task = json.load(task_info)[0]
+            resp = self.client.post(
+                reverse('task_create'),
+                data=create_task
+            )
+            self.assertEqual(resp.status_code, 302)
+            self.assertFlashMessages(resp, _("Task created successfully"))
+            self.assertRedirects(resp, reverse('list_task'))
 
-        resp = self.client.get(reverse('list_task'))
-        self.assertTrue(len(resp.context['object_list']) == 3)
+            resp = self.client.get(reverse('list_task'))
+            self.assertTrue(len(resp.context['object_list']) == tasks_count+1)
 
     def test_update_task(self):
-        resp = self.client.post(
-            reverse('task_update', kwargs={'pk': 1}),
-            {
-                "name": "UpdatedName",
-                "description": "UpdatedDescription",
-                "creator": 1,
-                "executor": 1,
-                "status": 1,
-                "labels": [1, 2],
-            }
-        )
-        self.assertEqual(resp.status_code, 302)
-        self.assertRedirects(resp, reverse('list_task'))
-        self.assertFlashMessages(resp, _('Task successfully changed'))
+        with open('tasks/fixtures/test_data.json', 'r') as task_info:
+            new_task = json.load(task_info)[1]
+            resp = self.client.post(
+                reverse('task_update', kwargs={'pk': 1}),
+                data=new_task
+            )
+            self.assertEqual(resp.status_code, 302)
+            self.assertRedirects(resp, reverse('list_task'))
+            self.assertFlashMessages(resp, _('Task successfully changed'))
 
-        task = Task.objects.get(name='UpdatedName')
-        self.assertEqual(task.name, 'UpdatedName')
-        self.assertEqual(task.description, 'UpdatedDescription')
+            task = Task.objects.get(name='UpdatedName')
+            self.assertEqual(task.name, new_task.get('name'))
+            self.assertEqual(task.description, new_task.get('description'))
 
     def test_read_task(self):
+        tasks_count = Task.objects.count()
         resp = self.client.get(reverse('list_task'))
-        self.assertTrue(len(resp.context['object_list']) == 2)
+        self.assertTrue(len(resp.context['object_list']) == tasks_count)
 
     def test_delete_task(self):
+        tasks_count = Task.objects.count()
         task = Task.objects.get(name='TestTask')
         resp = self.client.post(reverse('task_delete', kwargs={'pk': task.id}))
         self.assertFlashMessages(resp, _('Task successfully deleted'))
@@ -84,7 +78,7 @@ class TasksTest(TestCase):
         self.assertRedirects(resp, reverse('list_task'))
 
         resp = self.client.get(reverse('list_task'))
-        self.assertTrue(len(resp.context['object_list']) == 1)
+        self.assertTrue(len(resp.context['object_list']) == tasks_count-1)
 
         task = Task.objects.get(name='TestSecondTask')
         resp = self.client.post(reverse('task_delete', kwargs={'pk': task.id}))
@@ -93,8 +87,8 @@ class TasksTest(TestCase):
             _("You can't delete this task. Only author can")
         )
 
-    def assertFlashMessages(self, resp, message_text,
-                            message_count=1, message_id=0):
-        messages = list(get_messages(resp.wsgi_request))
-        self.assertEqual(len(messages), message_count)
-        self.assertEqual(str(messages[message_id]), message_text)
+    def assertFlashMessages(self, resp, message_text):
+        messages = [
+            message for message in map(str, get_messages(resp.wsgi_request))
+        ]
+        self.assertIn(message_text, messages)

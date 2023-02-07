@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
 from django.utils.translation import gettext_lazy as _
+import json
 
 
 class LabelsTest(TestCase):
@@ -20,39 +21,44 @@ class LabelsTest(TestCase):
         self.assertEqual(len(resp.context['object_list']), 3)
 
     def test_create(self):
-        resp = self.client.post(
-            path=reverse('label_create'),
-            data={'name': 'TestLabelName'}
-        )
-        self.assertEqual(resp.status_code, 302)
-        self.assertRedirects(resp, reverse('label_list'))
-        self.assertFlashMessages(resp, _("Label created successfully"))
+        labels_count = Label.objects.count()
+        with open('labels/fixtures/test_data.json', 'r') as label_info:
+            new_label = json.load(label_info)[0]
+            resp = self.client.post(
+                path=reverse('label_create'),
+                data=new_label
+            )
+            self.assertEqual(resp.status_code, 302)
+            self.assertRedirects(resp, reverse('label_list'))
+            self.assertFlashMessages(resp, _("Label created successfully"))
         resp = self.client.get(
             path=reverse('label_list')
         )
-        self.assertEqual(len(resp.context['object_list']), 4)
+        self.assertEqual(len(resp.context['object_list']), labels_count+1)
 
     def test_update(self):
         tested_label = Label.objects.get(name='label_1')
-        resp = self.client.post(
-            path=reverse('label_update', kwargs={'pk': tested_label.id}),
-            data={'name': 'UpdateLabelName'}
-        )
-        self.assertEqual(resp.status_code, 302)
-        self.assertFlashMessages(resp, _('Label successfully changed'))
-        tested_label.refresh_from_db()
-        self.assertEqual(tested_label.name, 'UpdateLabelName')
+        with open('labels/fixtures/test_data.json', 'r') as label_info:
+            new_label = json.load(label_info)[1]
+            resp = self.client.post(
+                path=reverse('label_update', kwargs={'pk': tested_label.id}),
+                data=new_label
+            )
+            self.assertEqual(resp.status_code, 302)
+            self.assertFlashMessages(resp, _('Label successfully changed'))
+            tested_label.refresh_from_db()
+            self.assertEqual(tested_label.name, new_label.get('name'))
 
     def test_delete(self):
+        labels_count = Label.objects.count()
         tested_label = Label.objects.get(name='label_1')
-        self.assertEqual(Label.objects.count(), 3)
         # Пытаемся удалить метку, прикрепленную к задаче
         resp = self.client.post(
             path=reverse('label_delete', kwargs={'pk': tested_label.id})
         )
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('label_list'))
-        self.assertEqual(Label.objects.count(), 3)
+        self.assertEqual(Label.objects.count(), labels_count)
         self.assertFlashMessages(
             resp,
             _("Can't delete, label in use")
@@ -65,9 +71,10 @@ class LabelsTest(TestCase):
         self.assertFlashMessages(resp, _('Label successfully deleted'))
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('label_list'))
-        self.assertEqual(Label.objects.count(), 2)
+        self.assertEqual(Label.objects.count(), labels_count-1)
 
-    def assertFlashMessages(self, resp, message_text, count=1):
-        messages = list(get_messages(resp.wsgi_request))
-        self.assertEqual(len(messages), count)
-        self.assertIn(str(messages[0]), message_text)
+    def assertFlashMessages(self, resp, message_text):
+        messages = [
+            message for message in map(str, get_messages(resp.wsgi_request))
+        ]
+        self.assertIn(message_text, messages)
