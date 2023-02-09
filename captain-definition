@@ -15,7 +15,7 @@
                         "ENV PATH=$POETRY_HOME/bin:$PATH",
                         "WORKDIR $APP_PATH",
                         "COPY ./ ./",
-                        "apt-get install -y libpq-dev",
+                        "RUN apt-get install -y libpq-dev",
                         "RUN apt-get install -y gettext",
                         "RUN apt-get install -y libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info",
                         "RUN poetry config installer.max-workers 30",
