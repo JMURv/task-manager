@@ -17,6 +17,6 @@
                         "COPY ./poetry.lock ./pyproject.toml ./",
                         "COPY ./$APP_NAME ./$APP_NAME",
                         "WORKDIR $APP_PATH",
-                        "CMD ["make", "ready"]"
+                        "CMD [\"make\", \"ready\"]"
                     ]
  }
