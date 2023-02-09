@@ -15,11 +15,12 @@
                         "ENV PATH=$POETRY_HOME/bin:$PATH",
                         "WORKDIR $APP_PATH",
                         "COPY ./ ./",
+                        "RUN apt-get update -y",
                         "RUN apt-get install -y libpq-dev",
                         "RUN apt-get install -y gettext",
                         "RUN apt-get install -y libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info",
                         "RUN poetry config installer.max-workers 30",
-                        "RUN poetry install --no-interaction --no-ansi -vvv",
+                        "RUN poetry install --no-ansi -vvv",
                         "EXPOSE 80",
                         "RUN make ready",
                         "CMD [\"make\", \"ready\"]"
