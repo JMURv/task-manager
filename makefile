@@ -8,7 +8,7 @@ ready:
 	poetry install
 	poetry run python manage.py makemigrations
 	poetry run python manage.py migrate
-	poetry run python manage.py runserver
+	poetry run gunicorn --bind 127.0.0.1:443 task_manager.wsgi
 
 migrate:
 	poetry run python manage.py makemigrations

@@ -1,0 +1,26 @@
+ {
+  "schemaVersion": 2,
+  "dockerfileLines": [
+                        "FROM python:3.9 as python-base",
+                        "ARG APP_NAME=python-project-52",
+                        "ARG APP_PATH=/$APP_NAME",
+                        ENV \
+                            PYTHONDONTWRITEBYTECODE=1 \
+                            PYTHONUNBUFFERED=1 \
+                            PYTHONFAULTHANDLER=1
+                        ENV \
+                            POETRY_VERSION=$POETRY_VERSION \
+                            POETRY_HOME="/opt/poetry" \
+                            POETRY_VIRTUALENVS_IN_PROJECT=true \
+                            POETRY_NO_INTERACTION=1
+                        "RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python",
+                        "ENV PATH="$POETRY_HOME/bin:$PATH",
+                        "WORKDIR $APP_PATH",
+                        "COPY ./poetry.lock ./pyproject.toml ./",
+                        "COPY ./$APP_NAME ./$APP_NAME",
+
+                        "WORKDIR $APP_PATH",
+                        "CMD ["make", "ready"]"
+
+                    ]
+ }
